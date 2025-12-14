@@ -5,7 +5,7 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet suit le [Semantic Versioning](https://semver.org/lang/fr/).
 
-## [1.0.0] - 2025-01-01
+## [1.0.0] - 2025-12-14
 
 ### Ajouté
 - Support complet ESP32 avec timer matériel (1µs résolution)

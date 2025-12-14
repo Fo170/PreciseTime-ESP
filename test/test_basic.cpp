@@ -1,3 +1,18 @@
+/**
+ * @file main.cpp
+ * @brief Exemple basique d'utilisation de PreciseTime
+ * @example Test_Basic.ino
+ * @version 1.0.0
+ * @date 2025
+ * 
+ * Copyright (C) 2025 Fo170
+ * 
+ * Ce programme est un logiciel libre ; vous pouvez le redistribuer
+ * et/ou le modifier selon les termes de la GNU General Public License
+ * telle que publiée par la Free Software Foundation ; soit la version 3
+ * de la Licence, soit (à votre choix) toute version ultérieure.
+ */
+
 #include <Arduino.h>
 #include <unity.h>
 #include <PreciseTime.h>
