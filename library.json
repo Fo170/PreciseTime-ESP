@@ -1,0 +1,41 @@
+
+## 3. Mise à jour de `library.json`
+
+```json
+{
+  "name": "PreciseTime",
+  "version": "1.0.0",
+  "description": "High precision timing library for ESP8266/ESP32 with overflow management",
+  "keywords": "timing, precision, time, esp8266, esp32, arduino, timer, microseconds, overflow",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Fo170/PreciseTime-ESP.git"
+  },
+  "authors": [
+    {
+      "name": "Fo170",
+      "url": "https://github.com/Fo170"
+    }
+  ],
+  "license": "GPL-3.0",
+  "homepage": "https://github.com/Fo170/PreciseTime-ESP",
+  "frameworks": "arduino",
+  "platforms": ["espressif8266", "espressif32"],
+  "headers": "PreciseTime.h",
+  "examples": [
+    {
+      "name": "Basic Example",
+      "path": "examples/BasicExample"
+    },
+    {
+      "name": "Advanced Example",
+      "path": "examples/AdvancedExample"
+    }
+  ],
+  "export": {
+    "include": [
+      "include/*",
+      "examples/*"
+    ]
+  }
+}

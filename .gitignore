@@ -1,0 +1,35 @@
+# PlatformIO
+.pio
+.pioenvs
+.piolibdeps
+.piolibbuild
+.pio-build*
+.pio-cache
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.elf
+*.hex
+*.bin
+*.eep
+*.lss
+*.sym
+*.map
+*.lst
+*.tmp
+*.log
+
+# Project specific
+/test/*.hex
+/test/*.bin
+/test/*.elf
