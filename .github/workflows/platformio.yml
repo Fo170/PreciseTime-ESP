@@ -1,68 +1,87 @@
-name: PlatformIO CI
+name: Release
 
 on:
   push:
-    branches: [ main, develop ]
-  pull_request:
-    branches: [ main ]
-  schedule:
-    # Exécute tous les dimanches à minuit
-    - cron: '0 0 * * 0'
+    tags:
+      - 'v*.*.*'  # Se déclenche uniquement sur les tags de version (ex: v1.0.0)
+
+permissions:
+  contents: write
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [espressif32, espressif8266]
-        example: [BasicExample, AdvancedExample]
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    
-    - name: Install PlatformIO Core
-      run: |
-        python -m pip install --upgrade pip
-        pip install platformio
-        
-    - name: Build ${{ matrix.example }} for ${{ matrix.platform }}
-      run: |
-        cd examples/${{ matrix.example }}
-        pio run -e ${{ matrix.platform == 'espressif32' && 'esp32dev' || 'nodemcuv2' }}
-        
-    - name: Run Tests
-      run: |
-        pio test -e test
-        
-  publish-check:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    
-    steps:
-    - uses: actions/checkout@v3
-    
-    - name: Validate library.json
-      run: |
-        python -c "
-import json
-with open('library.json') as f:
-    data = json.load(f)
-assert 'name' in data
-assert 'version' in data
-assert 'description' in data
-print('✅ library.json valide')
-        "
-        
-    - name: Check README
-      run: |
-        if grep -q '2025' README.md; then
-          echo '✅ README contient la date 2025'
-        else
-          echo '❌ README ne contient pas 2025'
-          exit 1
-        fi
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Get Changelog
+        id: changelog
+        run: |
+          # Récupère les commits depuis le dernier tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREVIOUS_TAG" ]; then
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
+          else
+            CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          fi
+          
+          # Sauvegarde dans un fichier pour éviter les problèmes de multilignes
+          echo "$CHANGELOG" > changelog.txt
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## 🚀 PreciseTime-ESP v${{ steps.get_version.outputs.VERSION }}
+            
+            Bibliothèque de synchronisation NTP haute précision pour ESP32/ESP8266
+            
+            ### 📦 Installation
+            
+            **PlatformIO:**
+            ```ini
+            [env:esp32]
+            lib_deps = 
+                https://github.com/Fo170/PreciseTime-ESP.git#v${{ steps.get_version.outputs.VERSION }}
+            ```
+            
+            **Arduino IDE:**
+            - Téléchargez le fichier Source code (zip) ci-dessous
+            - Sketch → Include Library → Add .ZIP Library
+            
+            ### 📝 Changements dans cette version
+            
+            $(cat changelog.txt)
+            
+            ### 📚 Documentation
+            
+            Voir le [README](https://github.com/Fo170/PreciseTime-ESP/blob/main/README.md) pour la documentation complète.
+            
+            ### 🐛 Signaler un bug
+            
+            [Ouvrir une issue](https://github.com/Fo170/PreciseTime-ESP/issues/new)
+            
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          files: |
+            LICENSE
+            README.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify PlatformIO Registry
+        if: success()
+        run: |
+          echo "✅ Release v${{ steps.get_version.outputs.VERSION }} créée avec succès"
+          echo "📌 La librairie sera disponible dans PlatformIO Registry après indexation"
+          echo "🔗 URL: https://github.com/Fo170/PreciseTime-ESP/releases/tag/v${{ steps.get_version.outputs.VERSION }}"
