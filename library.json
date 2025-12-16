@@ -1,7 +1,5 @@
 
-## 3. Mise à jour de `library.json`
-
-```json
+json
 {
   "name": "PreciseTime",
   "version": "1.0.0",
