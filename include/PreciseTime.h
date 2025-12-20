@@ -1,7 +1,7 @@
 /**
  * @file PreciseTime.h
  * @brief Librairie de chronométrage haute précision pour ESP8266/ESP32
- * @version 1.0.0
+ * @version 1.0.1
  * @date 2025-12-14
  * 
  * @license GPL-3.0
