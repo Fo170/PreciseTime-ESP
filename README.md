@@ -11,7 +11,7 @@
 
 Une librairie Arduino/PlatformIO pour un chronométrage ultra-précis avec gestion automatique des débordements, idéale pour les applications nécessitant une mesure du temps fiable sur de longues périodes.
 
-**Version actuelle : 1.0.0 (Décembre 2025)**
+**Version actuelle : 1.0.1 (Décembre 2025)**
 
 ## ✨ Fonctionnalités
 
