@@ -30,4 +30,4 @@ Ajoutez la dépendance à votre `platformio.ini` :
 
 ```ini
 lib_deps = 
-    https://github.com/Fo170/PreciseTime-ESP.git
+    https://github.com/Fo170/PreciseTime-ESP.git@^1.0.1
