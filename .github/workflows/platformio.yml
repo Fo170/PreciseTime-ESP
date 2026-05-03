@@ -1,0 +1,87 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Se déclenche uniquement sur les tags de version (ex: v1.0.0)
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Extract version from tag
+        id: get_version
+        run: echo "VERSION=${GITHUB_REF#refs/tags/v}" >> $GITHUB_OUTPUT
+
+      - name: Get Changelog
+        id: changelog
+        run: |
+          # Récupère les commits depuis le dernier tag
+          PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+          if [ -z "$PREVIOUS_TAG" ]; then
+            CHANGELOG=$(git log --pretty=format:"- %s (%h)" --no-merges)
+          else
+            CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
+          fi
+          
+          # Sauvegarde dans un fichier pour éviter les problèmes de multilignes
+          echo "$CHANGELOG" > changelog.txt
+          
+      - name: Create Release
+        uses: softprops/action-gh-release@v2
+        with:
+          name: Release v${{ steps.get_version.outputs.VERSION }}
+          body: |
+            ## 🚀 PreciseTime-ESP v${{ steps.get_version.outputs.VERSION }}
+            
+            Bibliothèque de synchronisation NTP haute précision pour ESP32/ESP8266
+            
+            ### 📦 Installation
+            
+            **PlatformIO:**
+            ```ini
+            [env:esp32]
+            lib_deps = 
+                https://github.com/Fo170/PreciseTime-ESP.git#v${{ steps.get_version.outputs.VERSION }}
+            ```
+            
+            **Arduino IDE:**
+            - Téléchargez le fichier Source code (zip) ci-dessous
+            - Sketch → Include Library → Add .ZIP Library
+            
+            ### 📝 Changements dans cette version
+            
+            $(cat changelog.txt)
+            
+            ### 📚 Documentation
+            
+            Voir le [README](https://github.com/Fo170/PreciseTime-ESP/blob/main/README.md) pour la documentation complète.
+            
+            ### 🐛 Signaler un bug
+            
+            [Ouvrir une issue](https://github.com/Fo170/PreciseTime-ESP/issues/new)
+            
+          draft: false
+          prerelease: false
+          generate_release_notes: false
+          files: |
+            LICENSE
+            README.md
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Notify PlatformIO Registry
+        if: success()
+        run: |
+          echo "✅ Release v${{ steps.get_version.outputs.VERSION }} créée avec succès"
+          echo "📌 La librairie sera disponible dans PlatformIO Registry après indexation"
+          echo "🔗 URL: https://github.com/Fo170/PreciseTime-ESP/releases/tag/v${{ steps.get_version.outputs.VERSION }}"

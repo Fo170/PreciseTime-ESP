@@ -1,0 +1,229 @@
+/**
+ * @file PreciseTime.h
+ * @brief Librairie de chronométrage haute précision pour ESP8266/ESP32
+ * @version 1.0.1
+ * @date 2025-12-14
+ * 
+ * @license GPL-3.0
+ * 
+ * Copyright (C) 2025
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ * 
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+#ifndef PRECISE_TIME_H
+#define PRECISE_TIME_H
+
+#include <Arduino.h>
+#include <math.h>
+
+#if defined(ESP32)
+#include "driver/timer.h"
+#include "soc/timer_group_struct.h"
+#include "soc/timer_group_reg.h"
+#endif
+
+class PreciseTime {
+private:
+    static bool initialized;
+    
+#if defined(ESP32)
+    static hw_timer_t* timer;
+    static volatile uint64_t time_fct_micros;
+    static portMUX_TYPE timerMux;
+
+    // Declare ISR here, implement in PreciseTime.cpp to avoid
+    // emitting the ISR inline into every translation unit.
+    static void IRAM_ATTR timerISR();
+    
+#elif defined(ESP8266)
+    static volatile uint32_t overflow_counter;
+    static uint32_t last_micros;
+    static uint64_t total_micros;
+
+    static void IRAM_ATTR microsOverflowISR();
+    static void updateTime();
+    
+#else
+    static uint32_t last_millis;
+    static uint64_t total_millis;
+
+    static void updateSoftwareTimer();
+#endif
+
+public:
+    static void begin() {
+        if (initialized) return;
+#if defined(ESP32)
+        timer = timerBegin(0, 80, true);
+        timerAttachInterrupt(timer, &timerISR, true);
+        timerAlarmWrite(timer, 1, true);
+        timerAlarmEnable(timer);
+#elif defined(ESP8266)
+        last_micros = micros();
+        total_micros = 0;
+        overflow_counter = 0;
+        timer1_isr_init();
+        timer1_attachInterrupt(microsOverflowISR);
+        timer1_enable(TIM_DIV16, TIM_EDGE, TIM_LOOP);
+#else
+        last_millis = millis();
+        total_millis = 0;
+#endif
+        initialized = true;
+    }
+
+    static uint64_t getMicroseconds() {
+#if defined(ESP32)
+        if (!initialized) return 0;
+        uint64_t time;
+        portENTER_CRITICAL(&timerMux);
+        time = time_fct_micros;
+        portEXIT_CRITICAL(&timerMux);
+        return time;
+#elif defined(ESP8266)
+        if (!initialized) return 0;
+        updateTime();
+        return total_micros;
+#else
+        if (!initialized) return 0;
+        updateSoftwareTimer();
+        return total_millis * 1000ULL;
+#endif
+    }
+
+    static uint64_t getMilliseconds() {
+        return getMicroseconds() / 1000ULL;
+    }
+
+    static uint64_t getSeconds() {
+        return getMicroseconds() / 1000000ULL;
+    }
+
+    static double getSecondsPrecise() {
+        return (double)getMicroseconds() / 1000000.0;
+    }
+
+    static void getFormattedTime(uint64_t &days, uint32_t &hours, 
+                                 uint32_t &minutes, uint32_t &seconds) {
+        uint64_t total_seconds = getSeconds();
+        days = total_seconds / 86400ULL;
+        uint64_t remaining = total_seconds % 86400ULL;
+        hours = remaining / 3600ULL;
+        remaining %= 3600ULL;
+        minutes = remaining / 60ULL;
+        seconds = remaining % 60ULL;
+    }
+
+    static String getFormattedString() {
+        uint64_t days;
+        uint32_t hours, minutes, seconds;
+        getFormattedTime(days, hours, minutes, seconds);
+        char buffer[64];
+        if (days > 0) {
+            snprintf(buffer, sizeof(buffer), "%llu jours, %02lu:%02lu:%02lu", 
+                     days, hours, minutes, seconds);
+        } else {
+            snprintf(buffer, sizeof(buffer), "%02lu:%02lu:%02lu", 
+                     hours, minutes, seconds);
+        }
+        return String(buffer);
+    }
+
+    static double getOverflowYears() {
+        return (pow(2, 64) / 1000000.0 / 3600.0 / 24.0 / 365.0);
+    }
+
+    static void update() {
+#if defined(ESP8266)
+        updateTime();
+#elif !defined(ESP32)
+        updateSoftwareTimer();
+#endif
+    }
+
+    static bool isInitialized() {
+        return initialized;
+    }
+
+    static void reset() {
+#if defined(ESP32)
+        portENTER_CRITICAL(&timerMux);
+        time_fct_micros = 0;
+        portEXIT_CRITICAL(&timerMux);
+#elif defined(ESP8266)
+        last_micros = micros();
+        total_micros = 0;
+        overflow_counter = 0;
+#else
+        last_millis = millis();
+        total_millis = 0;
+#endif
+    }
+};
+
+// Static variable definitions
+bool PreciseTime::initialized = false;
+
+#if defined(ESP32)
+hw_timer_t* PreciseTime::timer = nullptr;
+volatile uint64_t PreciseTime::time_fct_micros = 0;
+portMUX_TYPE PreciseTime::timerMux = portMUX_INITIALIZER_UNLOCKED;
+
+void IRAM_ATTR PreciseTime::timerISR() {
+    portENTER_CRITICAL_ISR(&timerMux);
+    time_fct_micros++;
+    portEXIT_CRITICAL_ISR(&timerMux);
+}
+
+#elif defined(ESP8266)
+volatile uint32_t PreciseTime::overflow_counter = 0;
+uint32_t PreciseTime::last_micros = 0;
+uint64_t PreciseTime::total_micros = 0;
+
+void IRAM_ATTR PreciseTime::microsOverflowISR() {
+    overflow_counter++;
+}
+
+void PreciseTime::updateTime() {
+    if (!initialized) return;
+    uint32_t current_micros = micros();
+    uint32_t high_part = overflow_counter;
+    if (current_micros < last_micros) {
+        high_part++;
+    }
+    total_micros = ((uint64_t)high_part << 32) | current_micros;
+    last_micros = current_micros;
+}
+
+#else
+uint32_t PreciseTime::last_millis = 0;
+uint64_t PreciseTime::total_millis = 0;
+
+void PreciseTime::updateSoftwareTimer() {
+    if (!initialized) return;
+    uint32_t current = millis();
+    uint32_t delta;
+    if (current >= last_millis) {
+        delta = current - last_millis;
+    } else {
+        delta = (UINT32_MAX - last_millis) + current + 1;
+    }
+    total_millis += delta;
+    last_millis = current;
+}
+
+#endif
+
+#endif // PRECISE_TIME_H
