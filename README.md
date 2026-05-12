@@ -41,9 +41,9 @@ lib_deps =
 
 | Critère | PreciseTime-ESP v1.0.1 |
 |:--------|:----------------------:|
-| Précision ESP32 | ⭐⭐⭐⭐⭐ |
-| Précision ESP8266 | ⭐⭐⭐⭐⭐ |
-| Précision Arduino AVR | ⭐⭐ |
+| Précision ESP32 | ⭐⭐⭐⭐⭐ 1 µs (timer hardware 80 MHz / 80) |
+| Précision ESP8266 | ⭐⭐⭐⭐⭐ ~4 µs (software overflow via micros()) |
+| Précision Arduino AVR/STM32/SAM | ⭐⭐ 1 ms (fallback millis()) |
 | Non-bloquant | ✅ Oui |
 | Gestion débordements | ✅ 584k ans |
 | Thread-safe (ESP32) | ✅ Oui |
@@ -57,7 +57,25 @@ lib_deps =
 | Maintenance active | ✅ v1.0.1 (déc 2025) |
 | Documentation | Complète |
 
----
+| Plateforme  |  Mémoire RAM statique |
+| ----------- |  ---------------------- |
+| **ESP32**   |  ~24 octets  |
+| **ESP8266** |  ~16 octets  |
+| **Arduino** |  ~12 octets  |
+
+
+| Plateforme  |  CPU (cycles par appel)   |
+| ----------- |  ------------------------ |
+| **ESP32**   |  ~30-50 cycles  |
+| **ESP8266** |  ~15-30 cycles  |
+| **Arduino** |  ~10-20 cycles  |
+
+Analyse technique :
+ESP32 : Timer hardware dédié (timerBegin(0, 80, true)), ISR incrémente un compteur 64 bits à chaque µs. Précision exacte.
+
+ESP8266 : micros() natif (32 bits) + overflow_counter via timer1 (TIM_DIV16). La résolution native de micros() sur ESP8266 est ~4 µs, pas 1 µs.
+
+Arduino : Fallback sur millis() → précision divisée par 1000.
 
 ## 🏆 Recommandation
 
