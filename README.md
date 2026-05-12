@@ -1,4 +1,4 @@
-# PreciseTime - Librairie de chronométrage haute précision pour ESP8266/ESP32
+# PreciseTime-ESP - Librairie de chronométrage haute précision pour ESP8266/ESP32
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Arduino](https://img.shields.io/badge/Arduino-IDE-00979C?style=flat&logo=arduino)](https://docs.arduino.cc/software/ide/)
