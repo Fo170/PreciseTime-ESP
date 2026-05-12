@@ -142,7 +142,7 @@ void loop() {
                 
             case 's':
             case 'S':
-                Serial.print("État système: ");
+                Serial.print("📊 État système: ");
                 Serial.println(PreciseTime::isInitialized() ? "Initialisé" : "Non initialisé");
                 Serial.printf("Mémoire libre: %d bytes\n", ESP.getFreeHeap());
                 break;
