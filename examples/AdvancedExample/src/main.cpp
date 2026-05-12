@@ -2,7 +2,7 @@
  * @file main.cpp
  * @brief Exemple avancé d'utilisation de PreciseTime
  * @example AdvancedExample.ino
- * @version 1.0.0
+ * @version 1.0.1
  * @date 2025
  * 
  * Copyright (C) 2025 Fo170
@@ -84,7 +84,7 @@ void setup() {
     
     Serial.println("╔════════════════════════════════════════╗");
     Serial.println("║     Exemple Avancé - PreciseTime       ║");
-    Serial.println("║           Version 1.0.0 - 2025         ║");
+    Serial.println("║           Version 1.0.1 - 2025         ║");
     Serial.println("╚════════════════════════════════════════╝");
     
     // Initialiser le chronométrage

@@ -2,7 +2,7 @@
  * @file main.cpp
  * @brief Exemple basique d'utilisation de PreciseTime
  * @example BasicExample.ino
- * @version 1.0.0
+ * @version 1.0.1
  * @date 2025
  * 
  * Copyright (C) 2025 Fo170
@@ -21,7 +21,7 @@ void setup() {
     delay(1000); // Attente pour le port série
     
     Serial.println("=== Exemple Basique PreciseTime ===");
-    Serial.println("Version 1.0.0 - 2025");
+    Serial.println("Version 1.0.1 - 2025");
     
     // Initialiser le système de temps
     PreciseTime::begin();
