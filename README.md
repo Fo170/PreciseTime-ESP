@@ -39,43 +39,35 @@ lib_deps =
 
 # Verdict Comparatif Final
 
-| Critère | PreciseTime v1.0.0 | PreciseTime-ESP v1.0.1 |
-|:--------|:------------------:|:----------------------:|
-| Précision ESP32 | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
-| Précision ESP8266 | ⭐⭐⭐⭐ | ⭐⭐⭐⭐ |
-| Précision Arduino AVR | ⭐⭐ | ❌ Non supporté |
-| Non-bloquant | ✅ Oui | ✅ Oui |
-| Gestion débordements | ✅ 584k ans | ✅ 584k ans |
-| Thread-safe (ESP32) | ✅ Oui | ✅ Oui |
-| Overhead CPU | ~30-80 cycles | ~15-50 cycles |
-| RAM statique | ~24-32 octets | ~24-32 octets |
-| Flash code | ~500-800 B | ~500-800 B |
-| Header-only | ❌ Non | ✅ Oui |
-| Inlining optimisé | ❌ Non | ✅ Oui |
-| Plateformes supportées | 5 plateformes | 2 plateformes (ESP) |
-| Exemples | 1 (Blink) | 2 (Basic + Advanced) |
-| Maintenance active | ⚠️ v1.0.0 | ✅ v1.0.1 (déc 2025) |
-| Documentation | Basique | Complète + badges |
+| Critère | PreciseTime-ESP v1.0.1 |
+|:--------|:----------------------:|
+| Précision ESP32 | ⭐⭐⭐⭐⭐ |
+| Précision ESP8266 | ⭐⭐⭐⭐⭐ |
+| Précision Arduino AVR | ⭐⭐ |
+| Non-bloquant | ✅ Oui |
+| Gestion débordements | ✅ 584k ans |
+| Thread-safe (ESP32) | ✅ Oui |
+| Overhead CPU | ~15-50 cycles |
+| RAM statique | ~24-32 octets |
+| Flash code | ~500-800 B |
+| Header-only | ✅ Oui |
+| Inlining optimisé | ✅ Oui |
+| Plateformes supportées | 5 plateformes |
+| Exemples | 2 (Basic + Advanced) |
+| Maintenance active | ✅ v1.0.1 (déc 2025) |
+| Documentation | Complète |
 
 ---
 
 ## 🏆 Recommandation
 
-- **Projet ESP8266/ESP32 uniquement** → **PreciseTime-ESP v1.0.1**
-  *(meilleure optimisation, header-only, plus récent)*
+Meilleure optimisation
 
-- **Projet multi-plateforme (AVR/STM32/SAM)** → **PreciseTime v1.0.0**
-  *(seule version supportant ces plateformes)*
+Projet multi-plateforme (AVR/STM32/SAM/ESP8266/ESP32)
 
-- **Performance critique sur ESP8266** → **PreciseTime-ESP v1.0.1**
-  *(inlining réduit l'overhead de ~30-40%)*
-
-- **Migration depuis PreciseTime v1.0.0** → **FACILE**
-  *(API 100% compatible, changer juste l'URL du dépôt)*
-
-Conclusion : PreciseTime-ESP v1.0.1 est une refactorisation optimisation de PreciseTime v1.0.0. Le code fonctionnel est strictement identique, mais la version ESP est header-only avec inlining complet, ce qui la rend plus rapide (~30-40%) et plus simple à intégrer, au prix du support limité aux plateformes ESP uniquement.
+Performance critique sur ESP8266/ESP32
+(inlining réduit l'overhead de ~30-40%)
 
 ## Dépôt GitHub
 
-Poussé sur : https://github.com/Fo170/PreciseTime
 Poussé sur : https://github.com/Fo170/PreciseTime-ESP
