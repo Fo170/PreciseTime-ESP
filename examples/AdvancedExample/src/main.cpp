@@ -53,7 +53,7 @@ void measureTaskExecution() {
  * @brief Affiche des informations détaillées sur le temps
  */
 void displayDetailedTime() {
-    Serial.println("\n=== INFORMATIONS TEMPS ===");
+    Serial.println("\n=== 🕒 INFORMATIONS TEMPS ===");
     
     // Différentes représentations du temps
     Serial.printf("Formaté:        %s\n", PreciseTime::getFormattedString().c_str());
