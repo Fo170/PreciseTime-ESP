@@ -13,7 +13,7 @@
 
 Une librairie Arduino/PlatformIO pour un chronométrage ultra-précis avec gestion automatique des débordements, idéale pour les applications nécessitant une mesure du temps fiable sur de longues périodes.
 
-**Version actuelle : 1.0.1 (Décembre 2025)**
+**Version actuelle : 1.0.2 (Août 2026)**
 
 ## ✨ Fonctionnalités
 
@@ -32,14 +32,14 @@ Ajoutez la dépendance à votre `platformio.ini` :
 
 ```ini
 lib_deps = 
-    https://github.com/Fo170/PreciseTime-ESP.git@^1.0.1
+    https://github.com/Fo170/PreciseTime-ESP.git@^1.0.2
 ```
 
 ## SYNTHÈSE FINALE & RECOMMANDATIONS ##
 
 # Verdict Comparatif Final
 
-| Critère | PreciseTime-ESP v1.0.1 |
+| Critère | PreciseTime-ESP v1.0.2 |
 |:--------|:----------------------:|
 | Précision ESP32 | ⭐⭐⭐⭐⭐ 1 µs (timer hardware 80 MHz / 80) |
 | Précision ESP8266 | ⭐⭐⭐⭐⭐ ~4 µs (software overflow via micros()) |
@@ -54,7 +54,7 @@ lib_deps =
 | Inlining optimisé | ✅ Oui |
 | Plateformes supportées | 5 plateformes |
 | Exemples | 2 (Basic + Advanced) |
-| Maintenance active | ✅ v1.0.1 (déc 2025) |
+| Maintenance active | ✅ v1.0.2 (août 2026) |
 | Documentation | Complète |
 
 | Plateforme  |  Mémoire RAM statique |

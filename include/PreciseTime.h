@@ -1,7 +1,7 @@
 /**
  * @file PreciseTime.h
  * @brief Librairie de chronométrage haute précision pour ESP8266/ESP32
- * @version 1.0.1
+ * @version 1.0.2
  * @date 2025-12-14
  * 
  * @license GPL-3.0
@@ -68,7 +68,7 @@ public:
 #if defined(ESP32)
         timer = timerBegin(0, 80, true);
         timerAttachInterrupt(timer, &timerISR, true);
-        timerAlarmWrite(timer, 1, true);
+        timerAlarmWrite(timer, 1000000, true);
         timerAlarmEnable(timer);
 #elif defined(ESP8266)
         last_micros = micros();
@@ -89,7 +89,7 @@ public:
         if (!initialized) return 0;
         uint64_t time;
         portENTER_CRITICAL(&timerMux);
-        time = time_fct_micros;
+        time = time_fct_micros + timerRead(timer);
         portEXIT_CRITICAL(&timerMux);
         return time;
 #elif defined(ESP8266)
@@ -161,6 +161,7 @@ public:
 #if defined(ESP32)
         portENTER_CRITICAL(&timerMux);
         time_fct_micros = 0;
+        timerWrite(timer, 0);
         portEXIT_CRITICAL(&timerMux);
 #elif defined(ESP8266)
         last_micros = micros();
@@ -183,7 +184,7 @@ portMUX_TYPE PreciseTime::timerMux = portMUX_INITIALIZER_UNLOCKED;
 
 void IRAM_ATTR PreciseTime::timerISR() {
     portENTER_CRITICAL_ISR(&timerMux);
-    time_fct_micros++;
+    time_fct_micros += 1000000;
     portEXIT_CRITICAL_ISR(&timerMux);
 }
 
