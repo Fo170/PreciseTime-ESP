@@ -25,6 +25,9 @@
 #ifndef PRECISE_TIME_H
 #define PRECISE_TIME_H
 
+
+// Version de la librairie (source UNIQUE — agrégée par liste_lib.h)
+#define __PRECISETIME_H_VERSION__ "1.0.2"
 #include <Arduino.h>
 #include <math.h>
 
