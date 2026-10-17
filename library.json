@@ -1,6 +1,6 @@
 {
 "name": "PreciseTime",
-"version": "1.0.2",
+"version": "1.0.3",
 "description": "High precision timing library for ESP8266/ESP32 with overflow management",
 "keywords": ["timing", "precision", "time", "esp8266", "esp32", "arduino", "timer"],
 "repository": { "type": "git", "url": "https://github.com/Fo170/PreciseTime-ESP.git" },

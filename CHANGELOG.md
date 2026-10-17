@@ -5,6 +5,19 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet suit le [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [1.0.3] - 2026-10-17
+
+### ✨ Added — macro de version `__<LIB>_H_VERSION__`
+
+Chaque header déclare désormais sa version via une macro préprocesseur,
+source **unique** (un projet hôte peut l'agréger, ex. page `/version`).
+
+### 🏷️ Divers
+
+- Version `1.0.2` → `1.0.3` (`library.json` + `library.properties`)
+
+---
+
 ## [1.0.2] - 2026-08-12
 
 ### Corrigé

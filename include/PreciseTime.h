@@ -27,7 +27,7 @@
 
 
 // Version de la librairie (source UNIQUE — agrégée par liste_lib.h)
-#define __PRECISETIME_H_VERSION__ "1.0.2"
+#define __PRECISETIME_H_VERSION__ "1.0.3"
 #include <Arduino.h>
 #include <math.h>
 
