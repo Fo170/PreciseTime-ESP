@@ -32,44 +32,45 @@ jobs:
           else
             CHANGELOG=$(git log ${PREVIOUS_TAG}..HEAD --pretty=format:"- %s (%h)" --no-merges)
           fi
-          
-          # Sauvegarde dans un fichier pour éviter les problèmes de multilignes
-          echo "$CHANGELOG" > changelog.txt
-          
+
+          # Corps de la release écrit dans un fichier : les substitutions $(...)
+          # ne sont PAS interprétées dans un input `body:` d'action.
+          {
+            echo "## 🚀 PreciseTime-ESP v${GITHUB_REF#refs/tags/v}"
+            echo ""
+            echo "Bibliothèque de chronométrage haute précision pour ESP8266/ESP32."
+            echo ""
+            echo "### 📦 Installation"
+            echo ""
+            echo "**PlatformIO:**"
+            echo '```ini'
+            echo "[env:esp8266]"
+            echo "lib_deps = "
+            echo "    https://github.com/Fo170/PreciseTime-ESP.git#v${GITHUB_REF#refs/tags/v}"
+            echo '```'
+            echo ""
+            echo "**Arduino IDE:**"
+            echo "- Téléchargez le fichier Source code (zip) ci-dessous"
+            echo "- Sketch → Include Library → Add .ZIP Library"
+            echo ""
+            echo "### 📝 Changements dans cette version"
+            echo ""
+            echo "$CHANGELOG"
+            echo ""
+            echo "### 📚 Documentation"
+            echo ""
+            echo "Voir le [README](https://github.com/Fo170/PreciseTime-ESP/blob/main/README.md) et le [CHANGELOG](https://github.com/Fo170/PreciseTime-ESP/blob/main/CHANGELOG.md)."
+            echo ""
+            echo "### 🐛 Signaler un bug"
+            echo ""
+            echo "[Ouvrir une issue](https://github.com/Fo170/PreciseTime-ESP/issues/new)"
+          } > release_body.md
+
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
           name: Release v${{ steps.get_version.outputs.VERSION }}
-          body: |
-            ## 🚀 PreciseTime-ESP v${{ steps.get_version.outputs.VERSION }}
-            
-            Bibliothèque de synchronisation NTP haute précision pour ESP32/ESP8266
-            
-            ### 📦 Installation
-            
-            **PlatformIO:**
-            ```ini
-            [env:esp32]
-            lib_deps = 
-                https://github.com/Fo170/PreciseTime-ESP.git#v${{ steps.get_version.outputs.VERSION }}
-            ```
-            
-            **Arduino IDE:**
-            - Téléchargez le fichier Source code (zip) ci-dessous
-            - Sketch → Include Library → Add .ZIP Library
-            
-            ### 📝 Changements dans cette version
-            
-            $(cat changelog.txt)
-            
-            ### 📚 Documentation
-            
-            Voir le [README](https://github.com/Fo170/PreciseTime-ESP/blob/main/README.md) pour la documentation complète.
-            
-            ### 🐛 Signaler un bug
-            
-            [Ouvrir une issue](https://github.com/Fo170/PreciseTime-ESP/issues/new)
-            
+          body_path: release_body.md
           draft: false
           prerelease: false
           generate_release_notes: false
