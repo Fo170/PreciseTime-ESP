@@ -5,6 +5,32 @@ Tous les changements notables de ce projet seront documentés dans ce fichier.
 Le format est basé sur [Keep a Changelog](https://keepachangelog.com/fr/1.0.0/),
 et ce projet suit le [Semantic Versioning](https://semver.org/lang/fr/).
 
+## [1.0.5] - 2026-10-30
+
+### 🐛 Corrigé — corps de release littéral dans la CI
+
+L'input `body:` de `softprops/action-gh-release` **n'interprète pas** les
+substitutions shell : la release `v1.0.4` contenait littéralement
+`$(cat changelog.txt)` à la place du changelog. L'étape « Get Changelog »
+calculait bien la liste des commits, mais son résultat n'était jamais relu.
+
+Le corps est désormais construit par `echo` dans `release_body.md` et passé
+via `body_path`. L'étape qui ne servait à rien devient la source du corps.
+
+### 🔄 Modifié
+
+- Snippet PlatformIO de la release : `[env:esp32]` → `[env:esp8266]`, la
+  branche ESP32 ne compilant pas avec Arduino-ESP32 core 3.x
+- Version `1.0.4` → `1.0.5` (`library.json`, `library.properties`,
+  `@version` du header, `README.md`)
+
+### ✅ Inchangé
+
+- Aucune modification du code de la librairie : la 1.0.4 reste valable
+  fonctionnellement, cette version ne corrige que la CI de publication.
+
+---
+
 ## [1.0.4] - 2026-10-30
 
 ### 🐛 Corrigé — recyclage de `micros()` toutes les 71,58 min sur ESP8266

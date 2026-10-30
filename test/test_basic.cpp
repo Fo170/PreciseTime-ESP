@@ -2,7 +2,7 @@
  * @file main.cpp
  * @brief Exemple basique d'utilisation de PreciseTime
  * @example Test_Basic.ino
- * @version 1.0.4
+ * @version 1.0.5
  * @date 2026
  * 
  * Copyright (C) 2025 Fo170

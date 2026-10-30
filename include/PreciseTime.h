@@ -1,7 +1,7 @@
 /**
  * @file PreciseTime.h
  * @brief Librairie de chronométrage haute précision pour ESP8266/ESP32
- * @version 1.0.4
+ * @version 1.0.5
  * @date 2026-10-30
  *
  * @license GPL-3.0
@@ -64,7 +64,7 @@
 
 
 // Version de la librairie (source UNIQUE — agrégée par liste_lib.h)
-#define __PRECISETIME_H_VERSION__ "1.0.4"
+#define __PRECISETIME_H_VERSION__ "1.0.5"
 
 // Période d'échantillonnage du compteur micros() sur ESP8266, en millisecondes.
 // Surchargeable à la compilation : -D PRECISETIME_SAMPLE_MS=5000UL

@@ -7,14 +7,14 @@
 [![ESP8266](https://img.shields.io/badge/ESP8266-Supported-green.svg)](https://www.espressif.com/)
 [![ESP32](https://img.shields.io/badge/ESP32-Supported-green.svg)](https://www.espressif.com/)
 [![Arduino Library Badge](https://www.ardu-badge.com/badge/PreciseTime-ESP.svg)](https://github.com/Fo170?tab=repositories)
-[![Version](https://img.shields.io/badge/version-1.0.4-blue.svg)](https://github.com/Fo170/PreciseTime-ESP/releases)
+[![Version](https://img.shields.io/badge/version-1.0.5-blue.svg)](https://github.com/Fo170/PreciseTime-ESP/releases)
 [![GitHub release](https://img.shields.io/github/v/release/Fo170/PreciseTime-ESP)](https://github.com/Fo170/PreciseTime-ESP/releases)
 ![GitHub last commit](https://img.shields.io/github/last-commit/Fo170/PreciseTime-ESP)
 
 
 Une librairie Arduino/PlatformIO pour un chronométrage ultra-précis avec gestion automatique des débordements, idéale pour les applications nécessitant une mesure du temps fiable sur de longues périodes.
 
-**Version actuelle : 1.0.4 (Octobre 2026)**
+**Version actuelle : 1.0.5 (Octobre 2026)**
 
 ## ✨ Fonctionnalités
 
@@ -35,7 +35,7 @@ Ajoutez la dépendance à votre `platformio.ini` :
 
 ```ini
 lib_deps = 
-    https://github.com/Fo170/PreciseTime-ESP.git@^1.0.4
+    https://github.com/Fo170/PreciseTime-ESP.git@^1.0.5
 ```
 
 ## ⚠️ Échantillonnage et compteur 32 bits (ESP8266)
@@ -74,7 +74,7 @@ void loop() {
 
 # Verdict Comparatif Final
 
-| Critère | PreciseTime-ESP v1.0.4 |
+| Critère | PreciseTime-ESP v1.0.5 |
 |:--------|:----------------------:|
 | Précision ESP32 | ⭐⭐⭐⭐⭐ 1 µs (timer hardware 80 MHz / 80) |
 | Précision ESP8266 | ⭐⭐⭐⭐⭐ ~4 µs (accumulation par delta de micros()) |
@@ -89,7 +89,7 @@ void loop() {
 | Inlining optimisé | ✅ Oui |
 | Plateformes supportées | 5 plateformes |
 | Exemples | 2 (Basic + Advanced) |
-| Maintenance active | ✅ v1.0.4 (octobre 2026) |
+| Maintenance active | ✅ v1.0.5 (octobre 2026) |
 | Documentation | Complète |
 
 | Plateforme  |  Mémoire RAM statique |
