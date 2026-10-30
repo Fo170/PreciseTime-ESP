@@ -2,8 +2,8 @@
  * @file main.cpp
  * @brief Exemple avancé d'utilisation de PreciseTime
  * @example AdvancedExample.ino
- * @version 1.0.1
- * @date 2025
+ * @version 1.0.4
+ * @date 2026
  * 
  * Copyright (C) 2025 Fo170
  * 
@@ -68,7 +68,8 @@ void displayDetailedTime() {
     PreciseTime::getFormattedTime(days, hours, minutes, seconds);
     
     if (days > 0) {
-        Serial.printf("Détails:        %llu jours, %lu heures\n", days, hours);
+        Serial.printf("Détails:        %llu jours, %lu heures\n",
+                      (unsigned long long)days, (unsigned long)hours);
     }
     
     // Calcul du pourcentage d'utilisation
@@ -84,7 +85,13 @@ void setup() {
     
     Serial.println("╔════════════════════════════════════════╗");
     Serial.println("║     Exemple Avancé - PreciseTime       ║");
-    Serial.println("║           Version 1.0.1 - 2025         ║");
+    {
+        char vline[64];
+        char vtxt[40];
+        snprintf(vtxt, sizeof(vtxt), "Version %s - 2026", __PRECISETIME_H_VERSION__);
+        snprintf(vline, sizeof(vline), "║           %-29s║", vtxt);
+        Serial.println(vline);
+    }
     Serial.println("╚════════════════════════════════════════╝");
     
     // Initialiser le chronométrage
@@ -153,6 +160,7 @@ void loop() {
                 uint64_t start = PreciseTime::getMicroseconds();
                 for (int i = 0; i < 1000; i++) {
                     volatile int x = i * i;
+                    (void)x;
                 }
                 uint64_t end = PreciseTime::getMicroseconds();
                 Serial.printf("Test terminé en %llu µs\n", end - start);
